@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ asset.asset_name }} Details</title>
+
+</head>
+
+<body>
+    
+    <p><strong>Asset Name:</strong> {{ asset.asset_name }}</p>
+    <p><strong>Asset ID:</strong> {{ asset.asset_id }}</p>
+    <p><strong>Location:</strong> {{ asset.location }}</p>
+    <p><strong>Start Time:</strong> {{ asset.start_time }}</p>
+    <p><strong>End Time:</strong> {{ asset.end_time }}</p>
+
+
+
+    <a href="{% url 'asset_list' %}">Back to Asset List</a>
+</body>
+
+</html>
