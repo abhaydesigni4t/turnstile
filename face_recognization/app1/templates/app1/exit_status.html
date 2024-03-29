@@ -298,31 +298,19 @@
                     <tr>
                         <th>ASSET ID</th>
                         <th>ASSET NAME</th>
-                        <th>Location</th>
-                        <th>Time Log</th>
+                        <th>LOCATION</th>
+                        <th>TIME LOG</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
+                    {% for asset in assets %}
                     <tr>
-                        <td>1</td>
-                        <td>asset1</td> 
-                        <td>gate-1</td>
-                        <td>10:00 AM</td>
+                        <td>{{ asset.asset_id }}</td>
+                        <td>{{ asset.asset_name }}</td> 
+                        <td>{{ asset.location }}</td>
+                        <td>{{ asset.time_log }}</td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>asset2</td> 
-                        <td>gate-2</td>
-                        <td>7:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>asset2</td> 
-                        <td>gate-1</td>
-                        <td>3:00 PM</td>
-                    </tr>
-                   
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -299,33 +299,15 @@
                 <th>Active Worker</th>
                 <th>Inactive Worker</th>
             </tr>
+            {% for site in sites %}
             <tr>
-                <td><a href="{% url 'management' %}">SITE A</a></td>
+                <td><a href="{% url 'management' %}">{{ site.name }}</a></td>
                 <td>{{ total_users }}</td>
                 <td>{{ active_users }}</td>
                 <td>{{ inactive_users }}</td>
             </tr>
-            <tr>
-                <td><a href="{% url 'management' %}">SITE B</a></td>
-                <td>500</td>
-                <!-- <td>{{i.job_role}}</td> -->
-                <td>500</td>
-                <td>500</td>
-            </tr>
-            <tr>
-                <td><a href="{% url 'management' %}">SITE C</a></td>
-                <td>500</td>
-                <!-- <td>{{i.job_role}}</td> -->
-                <td>500</td>
-                <td>500</td>
-            </tr>
-            <tr>
-              <td><a href="{% url 'management' %}">SITE D</a></td>
-              <td>500</td>
-              <!-- <td>{{i.job_role}}</td> -->
-              <td>500</td>
-              <td>500</td>
-          </tr>
+            {% endfor %}
+           
            
         </table>
     </div>

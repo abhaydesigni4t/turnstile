@@ -10,36 +10,122 @@
     {% load static %}
 
     <style>
+        
         body {
             font-family: 'Verdana', sans-serif;
             width: 100%;
             margin: 0;
             padding-top: 10vh;
+            background: #f4f4f4;
             box-sizing: border-box;
-            height: 800px;
+            height: 700px;
+        }
+
+        header {
+            background-color: #071390;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .nav {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            margin-right: 100px;
         }
 
-        .nav a,
-        .nav .logo {
-            padding: 10px;
+        .logo img {
+            max-height: 40px;
+            margin-left: 15px;
+            float: left;
+            border-radius: 20px;
+
+        }
+
+        .nav a {
+            padding: 10px 12px;
             color: white;
             text-decoration: none;
             display: inline-block;
-            margin-top: 0%;
-            flex: 1;
+            margin-right: 30px;
+            
         }
 
-        .nav .logo img {
-            margin-top: 15px;
-            max-height: 40px;
-            margin-right: 50px;
-            float: left;
-            border-radius: 20px;
-            margin-left: -210px;
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 0;
+            }
+
+            .nav a {
+                padding: 10px 10px;
+                font-size: 14px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            .nav a {
+                padding: 8px 5px;
+                font-size: 12px;
+            }
+
+        }
+
+        .dropdown {
+            display: inline-block;
+            
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 8px 10px;
+            text-decoration: none;
+            display: block;
+            
+        }
+
+        .nav .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #071390;
+            min-width: 80px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .nav .dropdown-content a {
+            float: none;
+            color: white;
+            padding: 8px 10px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .nav .dropdown-content a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .nav .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         .user {
@@ -113,85 +199,6 @@
             background-color: #f2463d;
         }
 
-        header {
-            background-color: #071390;
-            color: white;
-            text-align: center;
-            padding: 5px 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            margin-top: -15px;
-        }
-
-        .nav a {
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                padding: 8px 0;
-            }
-
-            .nav a {
-                padding: 10px 10px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav a {
-                padding: 8px 5px;
-                font-size: 12px;
-            }
-        }
-
-        .dropdown {
-            display: inline-block;
-        }
-
-        .nav .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #071390;
-            min-width: 80px;
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .nav .dropdown-content a {
-            float: none;
-            color: white;
-            padding: 8px 10px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-        }
-
-        .nav .dropdown-content a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .nav .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        @media only screen and (max-width: 600px) {
-            .nav a {
-                display: block;
-                width: 100%;
-                margin: 0px 0;
-            }
-        }
-
-        .nav a i {
-            margin-right: 5px;
-        }
 
         footer {
             position: fixed;
@@ -256,10 +263,10 @@
             background-color: #ddd;
         }
 
-        .filter-container{
-                margin-bottom: 5px;
+        .filter-container {
+            margin-bottom: 5px;
         }
-    
+
         .nav #lang-selector {
             margin-left: 10px;
             display: inline-block;
@@ -286,8 +293,8 @@
             min-width: 80px;
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
             z-index: 1;
-            left: -60px;
-            top: -10px;  
+            left: -65px;
+            top: -10px;
         }
 
         .nav #lang-selector .dropdown-content a {
@@ -312,6 +319,16 @@
             display: none;
         }
 
+        .filter-icon {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        /* Adjust the position of filter icon */
+        th div {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -374,7 +391,7 @@
             <label for="filterJobLocation">Job Location:</label>
             <input type="text" id="filterJobLocation" oninput="filterTable()">
 
-            
+
             <label for="filterStatus">Status:</label>
             <select id="filterStatus" onchange="filterTable()">
                 <option value="">All</option>
@@ -385,17 +402,52 @@
 
         <table id="customers">
             <tr>
-                <th>Name</th>
-                <th>Company Name</th>
-                <th>Job Role</th>
-                <th>Mycompany Id</th>
-                <th>Tag Id</th>
-                <th>Job Location</th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>
+                        Name
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>
+                        Company Name
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>
+                        Job Role
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>
+                        Mycompany Id
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>
+                        Tag Id
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>
+                        Job Location
+                    </div>
+                </th>
                 <th>Orientation</th>
-                <th>Status</th>
+                <th>
+                    <div>
+                        <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>
+                        Status
+                    </div>
+                </th>
                 <th>Action</th>
             </tr>
-            
+
             {% for i in data %}
             <tr>
                 <td>{{i.name}}</td>
@@ -407,19 +459,19 @@
                 {% load custom_filters %}
                 <td>
                     {% if i.orientation %}
-                        {% with file_extension=i.orientation.name|lower %}
-                            <a href="{{ i.orientation.url }}" target="_blank">
-                                <i class="file-icon {% if file_extension|slice:"-4" == '.pdf' %}far fa-file-pdf
+                    {% with file_extension=i.orientation.name|lower %}
+                    <a href="{{ i.orientation.url }}" target="_blank">
+                        <i class="file-icon {% if file_extension|slice:"-4" == '.pdf' %}far fa-file-pdf
                                     {% elif file_extension|slice:"-4" == '.doc' or file_extension|slice:"-5" == '.docx' %}far fa-file-word
                                     {% elif file_extension|slice:"-5" == '.jpeg' or file_extension|slice:"-4" == '.jpg' or file_extension|slice:"-4" == '.png' %}far fa-file-image
                                     {% elif file_extension|slice:"-4" == '.xls' or file_extension|slice:"-5" == '.xlsx' %}far fa-file-excel
                                     {% elif file_extension|slice:"-4" == '.ppt' or file_extension|slice:"-5" == '.pptx' %}far fa-file-powerpoint
                                     {% else %}far fa-file
                                 {% endif %}"></i>
-                            </a>
-                        {% endwith %}
+                    </a>
+                    {% endwith %}
                     {% else %}
-                        N/A
+                    N/A
                     {% endif %}
                 </td>
                 <td>{{i.status}}</td>
@@ -433,7 +485,7 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
                 {% endif %}
 
                 <span class="current">
@@ -441,7 +493,7 @@
                 </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
 
                 {% endif %}
             </span>
@@ -484,13 +536,58 @@
                         jobLocation.toUpperCase().includes(filterJobLocation) &&
                         statusFilterMatch
                     ) {
-                        row.style.display = ''; // Display the row if all conditions are met
+                        row.style.display = '';
                     } else {
-                        row.style.display = 'none'; // Hide the row if any condition is not met
+                        row.style.display = 'none';
                     }
                 }
             }
         }
+
+        function toggleFilter(index) {
+                var table = document.getElementById('customers');
+                var rows = table.rows;
+
+                // Extract the header row
+                var headerRow = rows[0];
+                var headerCell = headerRow.cells[index];
+
+                // Determine the current sorting order
+                var currentSortOrder = headerCell.dataset.sortOrder || 'asc';
+
+                // Toggle the sorting order
+                var newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+
+                // Reset sorting order for all header cells
+                for (var i = 0; i < headerRow.cells.length; i++) {
+                    headerRow.cells[i].removeAttribute('data-sort-order');
+                }
+
+                // Set sorting order for the current header cell
+                headerCell.dataset.sortOrder = newSortOrder;
+
+                // Sort the table based on the selected column
+                var sortIndex = index;
+                var sortDirection = newSortOrder === 'asc' ? 1 : -1;
+
+                var sortedRows = Array.from(rows).slice(1); // Exclude header row
+                sortedRows.sort(function(a, b) {
+                    var aValue = a.cells[sortIndex].textContent.trim();
+                    var bValue = b.cells[sortIndex].textContent.trim();
+
+                    if (isNaN(aValue) || isNaN(bValue)) { // For non-numeric values
+                        return aValue.localeCompare(bValue) * sortDirection;
+                    } else { // For numeric values
+                        return (parseFloat(aValue) - parseFloat(bValue)) * sortDirection;
+                    }
+                });
+
+                // Reorder the table rows based on the sorted rows
+                for (var i = 0; i < sortedRows.length; i++) {
+                    table.appendChild(sortedRows[i]);
+                }
+            }
+
     </script>
 </body>
 

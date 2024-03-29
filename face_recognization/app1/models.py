@@ -95,7 +95,15 @@ class Asset(models.Model):
     description = models.CharField(max_length=500)
     asset_category = models.CharField(max_length=250)
     
-
+    def __str__(self):
+        return self.asset_name
+    
+class Exit(models.Model):
+    asset_id = models.IntegerField()
+    asset_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=100)
+    time_log = models.CharField(max_length=10)
+    
     def __str__(self):
         return self.asset_name
     
@@ -105,4 +113,9 @@ class check_changes(models.Model):
     timestamp = models.DateTimeField(auto_now=True) 
    
 
+class Site(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 

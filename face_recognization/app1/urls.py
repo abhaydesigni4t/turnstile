@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -33,12 +33,20 @@ urlpatterns = [
     path('edit_asset/<int:pk>/', AssetUpdateView.as_view(), name='asset_edit'),
     path('delete_asset/<int:pk>/', AssetDeleteView.as_view(), name='asset_delete'),
     path('download-db/', DownloadDatabaseView.as_view(), name='download-db'),  # download in sqlite3 that is binary
+    path('detect_changes/', ChangeDetectionView.as_view(), name='detect-changes'),
     path('exit/',views.exit,name='exit'),
     path('company/',views.get_company,name='company'),
     path('time/',views.time_shedule,name='time'),
     path('setting_t/',views.setting_turn,name='setting_t'),
-
-    
+    path('action_status/', ActionStatusAPIView.as_view(), name='action_status'),
+    path('login_api/', LoginAPIView.as_view(), name='api-login'),
+    path('asset_api/', AssetCreateAPIView.as_view(), name='asset-create'),
+    path('users/', UserEnrollListCreateAPIView.as_view(), name='user-enroll-list-create'),
+    path('users/<str:name>/', UserEnrollDetailAPIView.as_view(), name='user-enroll-detail'),
+    path('get_assets_api/', AssetListAPIView.as_view(), name='asset-list'),
+    path('exits/', views.ExitListCreateAPIView.as_view(), name='exit-list-create'),
+    path('exits/<int:asset_id>/', views.ExitDetailAPIView.as_view(), name='exit-detail'),
+    path('sites_api/', SiteListAPIView.as_view(), name='site-list'),
 ]
 
 

@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm
-from .models import CustomUser,UserEnrolled,Asset
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,8 +16,14 @@ from django.views import View
 from django.http import JsonResponse,HttpResponse
 from django.db import connection
 from rest_framework.views import APIView
-from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth import authenticate, login,logout
+from django.core.cache import cache
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer
+from rest_framework import generics
 
 
 def user_login(request):
@@ -28,7 +34,7 @@ def user_login(request):
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
             if user:
-                login(request, user)    
+                login(request, user)   
                 return redirect('sites')
             else:             
                 form.add_error(None, 'Invalid username or password')
@@ -222,15 +228,17 @@ class DownloadDatabaseView(APIView):
             return response
 
 def exit(request):
-    return render(request,'app1/exit_status.html')
-
+    assets = Exit.objects.all()
+    return render(request, 'app1/exit_status.html', {'assets': assets})
 
 def site_view(request):
+    sites = Site.objects.all()
     total_users = UserEnrolled.objects.count()
     active_users = UserEnrolled.objects.filter(status='active').count()
     inactive_users = UserEnrolled.objects.filter(status='inactive').count()
     print(f"Total Users: {total_users}, Active Users: {active_users}, Inactive Users: {inactive_users}")
     return render(request, 'app1/site.html', {
+        'sites': sites,
         'total_users': total_users,
         'active_users': active_users,
         'inactive_users': inactive_users,
@@ -245,3 +253,111 @@ def time_shedule(request):
 
 def setting_turn(request):
     return render(request,'app1/setting_turn.html')
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ActionStatusSerializer
+from .middleware import ActionStatusMiddleware
+
+class ActionStatusAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        status_data = {'status': 1 if ActionStatusMiddleware.perform_action() else 0}
+        serializer = ActionStatusSerializer(status_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChangeDetectionView(APIView):
+    def get(self, request, *args, **kwargs):
+       
+        has_changes = cache.get('has_changes', False)
+        
+        if has_changes:
+            
+            cache.set('has_changes', False)
+            return Response({'changes_detected': 1})
+        else:
+            return Response({'changes_detected': 0})
+
+@receiver(post_save, sender=UserEnrolled)
+def book_change_handler(sender, instance, **kwargs):
+ 
+    cache.set('has_changes', True)
+
+@receiver(pre_delete, sender=UserEnrolled)
+def book_delete_handler(sender, instance, **kwargs):
+   
+    cache.set('has_changes', True)
+
+
+
+class LoginAPIView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                # Generate or retrieve token for the authenticated user
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key, 'message': 'Login successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class AssetCreateAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = AssetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class AssetListAPIView(generics.ListAPIView):
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializer
+
+
+class UserEnrollListCreateAPIView(generics.ListCreateAPIView):
+    queryset = UserEnrolled.objects.all()
+    serializer_class = UserEnrolledSerializer
+
+class UserEnrollDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserEnrolled.objects.all()
+    serializer_class = UserEnrolledSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+       
+        name = self.kwargs.get('name')
+     
+        obj = generics.get_object_or_404(queryset, name=name)
+        return obj
+
+
+class ExitListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Exit.objects.all()
+    serializer_class = ExitSerializer
+
+class ExitDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Exit.objects.all()
+    serializer_class = ExitSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+       
+        asset_id = self.kwargs.get('asset_id')
+     
+        obj = generics.get_object_or_404(queryset, asset_id=asset_id)
+        return obj
+
+
+class SiteListAPIView(generics.ListAPIView):
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
