@@ -91,7 +91,7 @@ class Site_management(models.Model):
 
 class Asset(models.Model):
     asset_name = models.CharField(max_length=255)
-    asset_id = models.IntegerField()
+    asset_id = models.IntegerField(unique=True)
     description = models.CharField(max_length=500)
     asset_category = models.CharField(max_length=250)
     
@@ -99,7 +99,7 @@ class Asset(models.Model):
         return self.asset_name
     
 class Exit(models.Model):
-    asset_id = models.IntegerField()
+    asset_id = models.IntegerField(unique=True)
     asset_name = models.CharField(max_length=255)
     location = models.CharField(max_length=100)
     time_log = models.CharField(max_length=10)

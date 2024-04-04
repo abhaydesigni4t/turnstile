@@ -2,12 +2,14 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm
 from .models import CustomUser,UserEnrolled,Asset,Exit,Site
+from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import UserEnrolledSerializer
 from django.views.generic.list import ListView
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
 from django.views.generic import UpdateView,DeleteView,DetailView
@@ -19,11 +21,10 @@ from rest_framework.views import APIView
 from django.core.cache import cache
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer
 from rest_framework import generics
+from .middleware import ActionStatusMiddleware
+from django.core.exceptions import ValidationError
 
 
 def user_login(request):
@@ -110,9 +111,6 @@ def report_view(request):
     return render(request, 'app1/report.html')
 
 
-from django.views.generic import ListView
-from .models import UserEnrolled
-
 class get_data(ListView):
     model = UserEnrolled
     template_name = 'app1/getdata.html'
@@ -185,8 +183,11 @@ def add_asset(request):
     if request.method == 'POST':
         form = AssetForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('asset_site')
+            try:
+                form.save()
+                return redirect('asset_site')
+            except ValidationError as e:
+                form.add_error('asset_id', str(e))
     else:
         form = AssetForm()
     return render(request, 'app1/add_asset.html', {'form': form})
@@ -255,13 +256,6 @@ def setting_turn(request):
     return render(request,'app1/setting_turn.html')
 
 
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import ActionStatusSerializer
-from .middleware import ActionStatusMiddleware
-
 class ActionStatusAPIView(APIView):
     def get(self, request, *args, **kwargs):
         status_data = {'status': 1 if ActionStatusMiddleware.perform_action() else 0}
@@ -292,7 +286,6 @@ def book_delete_handler(sender, instance, **kwargs):
     cache.set('has_changes', True)
 
 
-
 class LoginAPIView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -301,7 +294,7 @@ class LoginAPIView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(request, username=username, password=password)
             if user:
-                # Generate or retrieve token for the authenticated user
+           
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'token': token.key, 'message': 'Login successful'}, status=status.HTTP_200_OK)
             else:
@@ -318,7 +311,6 @@ class AssetCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class AssetListAPIView(generics.ListAPIView):
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
@@ -327,6 +319,10 @@ class AssetListAPIView(generics.ListAPIView):
 class UserEnrollListCreateAPIView(generics.ListCreateAPIView):
     queryset = UserEnrolled.objects.all()
     serializer_class = UserEnrolledSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(orientation=self.request.data.get('orientation'))
+
 
 class UserEnrollDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserEnrolled.objects.all()
@@ -345,15 +341,13 @@ class ExitListCreateAPIView(generics.ListCreateAPIView):
     queryset = Exit.objects.all()
     serializer_class = ExitSerializer
 
+
 class ExitDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Exit.objects.all()
     serializer_class = ExitSerializer
-
     def get_object(self):
         queryset = self.get_queryset()
-       
         asset_id = self.kwargs.get('asset_id')
-     
         obj = generics.get_object_or_404(queryset, asset_id=asset_id)
         return obj
 

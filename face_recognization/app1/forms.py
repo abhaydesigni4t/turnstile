@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser,Upload_data
 from django.contrib.auth import get_user_model
 from .models import UserEnrolled,Notification,Orientation
+from .models import Asset
 
 CustomUser = get_user_model()
 
@@ -42,21 +43,22 @@ class OrientationForm(forms.ModelForm):
         fields = ['attachments']
 
 
-from .models import Asset
-
-
 class AssetForm(forms.ModelForm):
     asset_category_choices = [
         ('category1', 'Category 1'),
-        ('category2', 'Category 2'),
-       
+        ('category2', 'Category 2'), 
     ]
-
     asset_category = forms.ChoiceField(choices=asset_category_choices)
 
     class Meta:
         model = Asset
-        fields = ['asset_name','asset_id','description','asset_category']
+        fields = ['asset_name', 'asset_id', 'description', 'asset_category']
+
+    def clean_asset_id(self):
+        asset_id = self.cleaned_data.get('asset_id')
+        if Asset.objects.filter(asset_id=asset_id).exists():
+            raise forms.ValidationError("This asset ID already exists.")
+        return asset_id
 
    
 
