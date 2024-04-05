@@ -119,3 +119,13 @@ class Site(models.Model):
     def __str__(self):
         return self.name
 
+
+class company(models.Model):
+    sr = models.AutoField(primary_key=True,unique=True)
+    name = models.CharField(max_length=100)
+    works = models.CharField(max_length=100)
+    safety_insurance = models.FileField(upload_to='attachments/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])
+    insurance_expiry = models.DateField()
+
+    def __str__(self):
+        return self.name

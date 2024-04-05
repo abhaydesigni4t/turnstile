@@ -1,9 +1,9 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Upload_data
+from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,Orientation
 from django.contrib.auth import get_user_model
-from .models import UserEnrolled,Notification,Orientation
-from .models import Asset
+
+
 
 CustomUser = get_user_model()
 
@@ -60,5 +60,21 @@ class AssetForm(forms.ModelForm):
             raise forms.ValidationError("This asset ID already exists.")
         return asset_id
 
-   
+class SiteForm(forms.ModelForm):
+    class Meta:
+        model = Site
+        fields = ['name']
 
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        return name.upper()
+
+
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model = company
+        fields = '__all__'
+        widgets = {
+            'safety_insurance': forms.ClearableFileInput(attrs={'accept': '.pdf,.doc,.docx,.jpeg,.jpg'}),
+        }
+        

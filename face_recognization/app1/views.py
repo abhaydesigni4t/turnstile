@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
-from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm
-from .models import CustomUser,UserEnrolled,Asset,Exit,Site
+from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm,SiteForm,CompanyForm
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company
 from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -246,9 +246,6 @@ def site_view(request):
     })
 
 
-def get_company(request):
-    return render(request,'app1/company.html')
-
 def time_shedule(request):
     return render(request,'app1/time_shedule.html')
 
@@ -355,3 +352,48 @@ class ExitDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class SiteListAPIView(generics.ListAPIView):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
+
+def add_site(request):
+    if request.method == 'POST':
+        form = SiteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('sites') 
+    else:
+        form = SiteForm()
+    return render(request, 'app1/add_site.html', {'form': form})
+
+class SiteUpdateView(UpdateView):
+    model = Site
+    form_class = SiteForm
+    template_name = 'app1/add_site.html'
+    success_url = '/sites/'
+
+    def get(self, request, *args, **kwargs):
+        
+        asset_instance = get_object_or_404(Site, pk=kwargs['pk'])
+        
+        form = self.form_class(instance=asset_instance)
+        
+        return self.render_to_response({'form': form})
+
+
+class SiteDeleteView(DeleteView):
+    model = Site
+    template_name = 'app1/data_confirm_delete2.html'
+    success_url = reverse_lazy('sites')
+
+
+def company_view(request):
+    compy = company.objects.all() 
+    return render(request, 'app1/company.html', {'compy': compy})
+
+def add_company_data(request):
+    if request.method == 'POST':
+        form = CompanyForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('company') 
+    else:
+        form = CompanyForm()
+    return render(request, 'app1/add_company.html', {'form': form})

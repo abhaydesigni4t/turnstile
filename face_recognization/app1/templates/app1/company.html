@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>Dashboard</title>
     {% load static %}
     <style>
@@ -134,7 +135,7 @@
             margin-top: 20px;
             display: inline-block;
             text-decoration: none;
-            border-radius: 5px 5px;
+            border-radius: 45px 20px;
         }
 
         #table-container {
@@ -198,6 +199,23 @@
         .footer-bottom p {
             margin: 0;
         }
+
+        .edit-btn,
+        .delete-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            text-decoration: none;
+        }
+
+        .delete-btn {
+            background-color: #f2463d;
+        }
+
     </style>
 </head>
 
@@ -223,30 +241,47 @@
     </header>
 
     <div class="user">
-        <a class="add" href="#">Add</a>
+        <a class="add" href="{% url 'add_company' %}">Add</a>
     </div>
     <div id="table-container">
         <table id="customers">
             <tr>
+                <th>Sr No</th>
                 <th>Name</th>
                 <th>Works</th>
                 <th>Safety Insurance</th>
-                <th>Insurance Expiry</th>   
+                <th>Insurance Expiry</th>
+                <th>Action</th>   
             </tr>
             
+            {% for i in compy %}
             <tr>
-                <td>abc</td>
-                <td>abc</td>
-                <td>document</td>
-                <td>abc</td>    
-            </tr>
-            
+                <td>{{ i.sr }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.works }}</td> 
+                <td>{% if i.safety_insurance %}
+                    {% with file_extension=i.safety_insurance.name|lower %}
+                    <a href="{{ i.safety_insurance.url }}" target="_blank">
+                        <i class="file-icon {% if file_extension|slice:"-4" == '.pdf' %}far fa-file-pdf
+                                    {% elif file_extension|slice:"-4" == '.doc' or file_extension|slice:"-5" == '.docx' %}far fa-file-word
+                                    {% elif file_extension|slice:"-5" == '.jpeg' or file_extension|slice:"-4" == '.jpg' or file_extension|slice:"-4" == '.png' %}far fa-file-image
+                                    {% elif file_extension|slice:"-4" == '.xls' or file_extension|slice:"-5" == '.xlsx' %}far fa-file-excel
+                                    {% elif file_extension|slice:"-4" == '.ppt' or file_extension|slice:"-5" == '.pptx' %}far fa-file-powerpoint
+                                    {% else %}far fa-file
+                                {% endif %}"></i>
+                    </a>
+                    {% endwith %}
+                    {% else %}
+                    N/A
+                    {% endif %}
+                </td>
+                <td>{{ i.insurance_expiry }}</td>
+                <td>
+                    <a href="#" class="edit-btn">Edit</a>
+                    <a href="#" class="delete-btn">Delete</a>
+                </td>   
             <tr>
-                <td>abc</td>
-                <td>abc</td>
-                <td>document</td>
-                <td>abc</td>    
-            </tr>
+                {% endfor %}
         </table>
     </div>
     <footer>

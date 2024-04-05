@@ -35,8 +35,7 @@
             justify-content: space-between;
         }
 
-        .nav a,
-        .nav .logo {
+        .nav a {
             padding: 5px;
             color: white;
             text-decoration: none;
@@ -57,6 +56,10 @@
             
         }
 
+        .nav .dash{
+            margin-top: 8px;
+            margin-left: 500px;
+        }
         .nav .dropdown .dropbtn {
             font-size: 16px;
             border: none;
@@ -97,62 +100,6 @@
             display: block;
         }
 
-        #table-container {
-            margin-top: 25px;
-            margin-left: 300px;
-            margin-right: 40px;
-        }
-
-        #customers {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 70%;
-        }
-
-        #customers td,
-        #customers th {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-
-
-        #customers tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #customers tr:hover {
-            background-color: #ddd;
-        }
-
-        #customers th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: center;
-            background-color: #071390;
-            color: white;
-        }
-
-        .heading1 {
-            text-align: center;
-        }
-
-        .edit-btn,
-        .delete-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 5px;
-            text-decoration: none;
-        }
-
-        .delete-btn {
-            background-color: #f2463d;
-        }
-
         @media only screen and (max-width: 600px) {
             .nav a {
                 display: block;
@@ -161,21 +108,37 @@
             }
         }
 
-        #lang-selector {
-            margin-left: 10px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        #lang-selector select {
-            padding: 5px;
-            font-size: 14px;
-        }
-
         .nav a i {
             margin-right: 5px;
         }
-        
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-top: 60px;
+            margin-left: 60px;
+        }
+
+        .site-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .site-list li {
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #071390;
+            cursor: pointer;
+            width: 30%;
+            color: white;
+            font-weight: bold;
+        }
+
+        .site-list li a{
+            background-color: #071390;
+            color: white;
+        }
+
         #notification-icon {
             font-size: 24px;
             color: white;
@@ -183,6 +146,106 @@
             cursor: pointer;
         }
 
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            margin-top: 20px;
+            height: 550px;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            background-color: #071390;
+            color: white;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+
+        .form-label {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+        }
+
+        .form-label,
+        select {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #071390;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #0a1052;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .content {
+                margin-top: 10px;
+            }
+
+            .form-container {
+                max-width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .form-container {
+                padding: 10px;
+            }
+
+            input,
+            button {
+                width: 100%;
+                margin-bottom: 15px; 
+            }
+           
+        }
         footer {
             position: fixed;
             bottom: 0;
@@ -261,29 +324,13 @@
         .nav #lang-selector select {
             display: none;
         }
-
-        .add {
-            background-color: #071390;
-            color: white;
-            padding: 10px;
-            border: solid;
-            margin-top: 20px;
-            display: inline-block;
-            text-decoration: none;
-            border-radius: 50px 20px;
-        }
-
-        .user {
-            text-align: center;
-            margin-top: 10px;
-        }
-
     </style>
 </head>
 
 <body>
     <div class="nav">
         <a class="logo" href="#"><img src="{% static 'app1/images/logo.jpg' %}" alt="Logo"></a>
+        <a class="dash" href="{% url 'sites' %}"><i class="fas fa-tachometer-alt"></i>Site Management</a>
         <div class="dropdown">
             <a href="#" class="dropbtn"><i class="fas fa-user"></i>Profile</a>
             <div class="dropdown-content">
@@ -305,39 +352,36 @@
             </div>
         </div>
     </div>
+    
+    <div class="content">
+        <div class="form-container">
+            <h2>Add Data</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
 
-    <div class="user">
-        <a class="add" href="{% url 'add_site' %}">Add Site</a>
-    </div>
+                <label for="id_name">Name:</label>
+                {{ form.name }}
+                <br>
 
-    <div id="table-container">
-        <table id="customers">
-            <tr>
-                <th>Site Name</th>
-                <th>Total Worker</th>
-                <th>Active Worker</th>
-                <th>Inactive Worker</th>
-                <th>Action</th>
-            </tr>
-            {% for site in sites %}
-            <tr>
-                <td><a href="{% url 'management' %}">{{ site.name }}</a></td>
-                <td>{{ total_users }}</td>
-                <td>{{ active_users }}</td>
-                <td>{{ inactive_users }}</td>
-                <td>
-                    <a href="{% url 'edit_sites' site.id %}" class="edit-btn">Edit</a>
-                    <a href="{% url 'delete_sites' site.pk %}" class="delete-btn">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-           
-           
-        </table>
+                <label for="id_works">Works:</label>
+                {{ form.works }}
+                <br>
+
+                <label for="id_safety_insurance">Safety Insurance:</label>
+                {{ form.safety_insurance }}
+                <br>
+
+                <label for="id_insurance_expiry">Insurance Expiry:</label>
+                {{ form.insurance_expiry }}
+                <br>
+                
+                <button type="submit">Save</button>
+            </form>
+        </div>
     </div>
     <footer>
-            <p>Email: info@assuretech.com</p>
-            <p>Phone: +1 (123) 456-7890</p>
+        <p>Email: info@assuretech.com</p>
+        <p>Phone: +1 (123) 456-7890</p>
         <div class="footer-bottom">
             <p>&copy; 2024 Assure Tech. All rights reserved.</p>
         </div>

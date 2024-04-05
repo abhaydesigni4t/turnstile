@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,7 +35,6 @@ urlpatterns = [
     path('download-db/', DownloadDatabaseView.as_view(), name='download-db'),  # download in sqlite3 that is binary
     path('detect_changes/', ChangeDetectionView.as_view(), name='detect-changes'),
     path('exit/',views.exit,name='exit'),
-    path('company/',views.get_company,name='company'),
     path('time/',views.time_shedule,name='time'),
     path('setting_t/',views.setting_turn,name='setting_t'),
     path('action_status/', ActionStatusAPIView.as_view(), name='action_status'),
@@ -47,6 +46,13 @@ urlpatterns = [
     path('exits/', views.ExitListCreateAPIView.as_view(), name='exit-list-create'),
     path('exits/<int:asset_id>/', views.ExitDetailAPIView.as_view(), name='exit-detail'),
     path('sites_api/', SiteListAPIView.as_view(), name='site-list'),
+    path('add_site/', views.add_site, name='add_site'),
+    path('edit_site/<int:pk>/', SiteUpdateView.as_view(), name='edit_sites'),
+    path('delete_site/<int:pk>/', SiteDeleteView.as_view(), name='delete_sites'),
+    path('company/', views.company_view, name='company'),
+    path('add_company/', views.add_company_data, name='add_company'),
+
+
 ]
 
 
