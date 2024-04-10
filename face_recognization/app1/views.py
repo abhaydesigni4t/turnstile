@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm,SiteForm,CompanyForm
-from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule
 from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -397,3 +397,29 @@ def add_company_data(request):
     else:
         form = CompanyForm()
     return render(request, 'app1/add_company.html', {'form': form})
+
+
+class CompanyUpdateView(UpdateView):
+    model = company
+    form_class = CompanyForm
+    template_name = 'app1/add_company.html'
+    success_url = '/company/'
+
+    def get(self, request, *args, **kwargs):
+        
+        asset_instance = get_object_or_404(company, pk=kwargs['pk'])
+        
+        form = self.form_class(instance=asset_instance)
+        
+        return self.render_to_response({'form': form})
+
+
+class CompanyDeleteView(DeleteView):
+    model = company
+    template_name = 'app1/data_confirm_delete3.html'
+    success_url = reverse_lazy('company')
+
+
+def timesche(request):
+    data = timeschedule.objects.all()
+    return render(request, 'app1/time_shedule.html', {'data': data})

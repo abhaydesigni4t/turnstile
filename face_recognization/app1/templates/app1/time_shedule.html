@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" />
     <title>Dashboard</title>
     {% load static %}
     <style>
@@ -309,19 +310,15 @@
                 <th>Inactive Time</th>  
             </tr>
             
+            {% for row in data %}
             <tr>
-                <td>admin</td>
-                <td>00:00</td>
-                <td>00:00</td>   
+                <td>{{ row.group }}</td>
+                <td>{{ row.active_time }}</td>
+                <td>{{ row.inactive_time }}</td>   
             </tr>
-            
-            <tr>
-                <td>worker</td>
-                <td>8:00</td>
-                <td>20:00</td>    
-            </tr>
-        </table>
-    </div>
+            {% endfor %}
+                </table>
+            </div>
 
     <footer>
         <p>Email: info@assuretech.com</p>

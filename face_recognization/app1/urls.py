@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,7 +35,6 @@ urlpatterns = [
     path('download-db/', DownloadDatabaseView.as_view(), name='download-db'),  # download in sqlite3 that is binary
     path('detect_changes/', ChangeDetectionView.as_view(), name='detect-changes'),
     path('exit/',views.exit,name='exit'),
-    path('time/',views.time_shedule,name='time'),
     path('setting_t/',views.setting_turn,name='setting_t'),
     path('action_status/', ActionStatusAPIView.as_view(), name='action_status'),
     path('login_api/', LoginAPIView.as_view(), name='api-login'),
@@ -51,7 +50,9 @@ urlpatterns = [
     path('delete_site/<int:pk>/', SiteDeleteView.as_view(), name='delete_sites'),
     path('company/', views.company_view, name='company'),
     path('add_company/', views.add_company_data, name='add_company'),
-
+    path('edit_company/<int:pk>/', CompanyUpdateView.as_view(), name='edit_company'),
+    path('delete_company/<int:pk>/', CompanyDeleteView.as_view(), name='delete_company'),
+    path('time/', views.timesche, name='time'),
 
 ]
 

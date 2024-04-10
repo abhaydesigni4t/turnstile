@@ -129,3 +129,12 @@ class company(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class timeschedule(models.Model):
+    group = models.CharField(max_length=100)
+    active_time = models.CharField(max_length=50)
+    inactive_time = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.group
