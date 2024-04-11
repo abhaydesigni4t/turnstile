@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm,SiteForm,CompanyForm
-from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule
-from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification
+from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -69,19 +69,18 @@ class UserEnrolledRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     queryset = UserEnrolled.objects.all()
     serializer_class = UserEnrolledSerializer
 
-class msg(TemplateView):
-    template_name = 'app1/success.html'
-
 def post_notification(request):
     if request.method == 'POST':
         form = NotificationForm(request.POST)
         if form.is_valid():
             notification = form.save()
-            return JsonResponse({'message': 'Notification saved successfully'})
+            return redirect('success')
     else:
         form = NotificationForm()
     return render(request, 'app1/notification.html', {'form': form})
 
+def success_page(request):
+    return render(request, 'app1/success.html')
 
 def upload_file(request):
     if request.method == 'POST':
@@ -327,10 +326,8 @@ class UserEnrollDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         queryset = self.get_queryset()
-       
-        name = self.kwargs.get('name')
-     
-        obj = generics.get_object_or_404(queryset, name=name)
+        tag_id = self.kwargs.get('tag_id')  
+        obj = generics.get_object_or_404(queryset, tag_id=tag_id) 
         return obj
 
 
@@ -423,3 +420,8 @@ class CompanyDeleteView(DeleteView):
 def timesche(request):
     data = timeschedule.objects.all()
     return render(request, 'app1/time_shedule.html', {'data': data})
+
+
+class NotificationList(generics.ListAPIView):
+    queryset = Notification.objects.all().order_by('-id')
+    serializer_class = NotificationSerializer

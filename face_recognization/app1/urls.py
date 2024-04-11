@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,msg,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,7 +14,6 @@ urlpatterns = [
     path('api_user_enro/<int:pk>/', UserEnrolledRetrieveUpdateDestroyView.as_view(), name='user_enro2'),
     path('get_all/',get_data.as_view(),name='get_all'),
     path('create/',create_data.as_view(),name='create'),
-    path('success/',msg.as_view(),name='success'),
     path('notification/',views.post_notification, name='notification'),
     path('upload/', views.upload_file, name='upload'),
     path('orientation/', views.orientation_task, name='orientation'),
@@ -38,10 +37,10 @@ urlpatterns = [
     path('setting_t/',views.setting_turn,name='setting_t'),
     path('action_status/', ActionStatusAPIView.as_view(), name='action_status'),
     path('login_api/', LoginAPIView.as_view(), name='api-login'),
-    path('asset_api/', AssetCreateAPIView.as_view(), name='asset-create'),
     path('users/', UserEnrollListCreateAPIView.as_view(), name='user-enroll-list-create'),
-    path('users/>str:name</', UserEnrollDetailAPIView.as_view(), name='user-enroll-detail'),
+    path('users/<int:tag_id>/', UserEnrollDetailAPIView.as_view(), name='user-enroll-detail'), 
     path('get_assets_api/', AssetListAPIView.as_view(), name='asset-list'),
+    path('asset_api/', AssetCreateAPIView.as_view(), name='asset-create'),
     path('exits/', views.ExitListCreateAPIView.as_view(), name='exit-list-create'),
     path('exits/<int:asset_id>/', views.ExitDetailAPIView.as_view(), name='exit-detail'),
     path('sites_api/', SiteListAPIView.as_view(), name='site-list'),
@@ -53,8 +52,14 @@ urlpatterns = [
     path('edit_company/<int:pk>/', CompanyUpdateView.as_view(), name='edit_company'),
     path('delete_company/<int:pk>/', CompanyDeleteView.as_view(), name='delete_company'),
     path('time/', views.timesche, name='time'),
+    path('notification_api/', NotificationList.as_view(), name='notification-list'),
+    path('success/', views.success_page, name='success'),
+   
 
-]
+
+] 
+
+
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

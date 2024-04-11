@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserEnrolled,Asset,Exit,Site
+from .models import UserEnrolled,Asset,Exit,Site,Notification
 
 class UserEnrolledSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +35,8 @@ class SiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Site
         fields = ['id', 'name']
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['subject', 'description', 'username']

@@ -124,6 +124,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -137,8 +139,6 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
-
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
@@ -149,3 +149,6 @@ FILE_UPLOAD_HANDLERS = [
 ]
 
 
+APPEND_SLASH = False
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

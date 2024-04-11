@@ -69,7 +69,7 @@ class Notification(models.Model):
     username = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.title
+        return self.subject
 
 
 class Upload_data(models.Model):
@@ -78,9 +78,8 @@ class Upload_data(models.Model):
   
     def __str__(self):
         return str(self.uploaded_file)
-
-
-
+    
+    
 class Orientation(models.Model):
     attachments = models.FileField(upload_to='attachments/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])
 
