@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserEnrolled,Asset,Exit,Site,Notification
+from .models import UserEnrolled,Asset,Exit,Site,Notification,Upload_File
 
 class UserEnrolledSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +40,8 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['subject', 'description', 'username']
+
+class UploadedFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Upload_File
+        fields = '__all__'

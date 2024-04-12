@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList,FileUploadView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,7 +16,6 @@ urlpatterns = [
     path('create/',create_data.as_view(),name='create'),
     path('notification/',views.post_notification, name='notification'),
     path('upload/', views.upload_file, name='upload'),
-    path('orientation/', views.orientation_task, name='orientation'),
     path('report/', views.report_view, name='report'),
     path('update/<int:pk>/', UpdateData.as_view(), name='user_update'),
     path('delete/<int:pk>/', TaskDeleteView.as_view(), name='task_delete'),
@@ -54,6 +53,8 @@ urlpatterns = [
     path('time/', views.timesche, name='time'),
     path('notification_api/', NotificationList.as_view(), name='notification-list'),
     path('success/', views.success_page, name='success'),
+    path('file_upload_api/', FileUploadView.as_view(), name='file-upload'),
+    path('timeshe/', views.add_timesh, name='timeshe'),
    
 
 

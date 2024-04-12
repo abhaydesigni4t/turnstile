@@ -1,6 +1,6 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,Orientation
+from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,timeschedule
 from django.contrib.auth import get_user_model
 
 
@@ -36,11 +36,6 @@ class upload_form(forms.ModelForm):
     class Meta:
         model = Upload_data
         fields = ['uploaded_file']
-
-class OrientationForm(forms.ModelForm):
-    class Meta:
-        model = Orientation
-        fields = ['attachments']
 
 
 class AssetForm(forms.ModelForm):
@@ -78,3 +73,8 @@ class CompanyForm(forms.ModelForm):
             'safety_insurance': forms.ClearableFileInput(attrs={'accept': '.pdf,.doc,.docx,.jpeg,.jpg'}),
         }
         
+
+class timescheduleForm(forms.ModelForm):
+    class Meta:
+        model = timeschedule
+        fields = '__all__'

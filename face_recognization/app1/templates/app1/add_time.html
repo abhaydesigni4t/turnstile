@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" />
-    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-l2pS9FXoq07xZ8T3is0sZuqA4xsJqHvAWEbflU24M6p0T/zl5sJ46R/DLxUJhSZ+7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>User Management</title>
+    <title>header and footer</title>
     {% load static %}
+   
     <style>
         body {
             font-family: 'Verdana', sans-serif;
@@ -22,7 +25,7 @@
             background-color: #071390;
             color: white;
             text-align: center;
-            padding: 20px 0;
+            padding: 10px 0;
             position: fixed;
             top: 0;
             width: 100%;
@@ -35,7 +38,7 @@
         .nav {
             display: flex;
             align-items: center;
-            margin-right: 100px;
+            margin-right: 10px;
         }
 
         .logo img {
@@ -47,10 +50,11 @@
         }
 
         .nav a {
-            padding: 12px 20px;
+            padding: 10px 12px;
             color: white;
             text-decoration: none;
             display: inline-block;
+            margin-right: 25px;
             
         }
 
@@ -69,16 +73,15 @@
 
         @media (max-width: 480px) {
             .nav a {
-                padding: 10px 5px;
+                padding: 8px 5px;
                 font-size: 12px;
             }
-
         }
 
         .dropdown {
-            display: inline-block;
+            display: inline-block;  
         }
-
+        
         .dropdown-content {
             display: none;
             position: absolute;
@@ -93,24 +96,28 @@
             padding: 8px 10px;
             text-decoration: none;
             display: block;
+            text-align: center;
+            
         }
 
         .nav .dropdown-content {
             display: none;
             position: absolute;
             background-color: #071390;
-            min-width: 80px;
+            min-width: 20px;
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
             z-index: 1;
+            
         }
 
         .nav .dropdown-content a {
             float: none;
             color: white;
-            padding: 8px 10px;
+            padding: 6px 6px;
             text-decoration: none;
             display: block;
-            text-align: left;
+            text-align: center;
+            margin-right: -0.5px;
         }
 
         .nav .dropdown-content a:hover {
@@ -122,86 +129,6 @@
             display: block;
         }
 
-        .user {
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        .add {
-            background-color: #071390;
-            color: white;
-            padding: 10px;
-            border: solid;
-            margin-top: 20px;
-            display: inline-block;
-            text-decoration: none;
-            border-radius: 5px 5px;
-        }
-
-        #table-container {
-            margin-top: 20px;
-            margin-left: 250px;
-            margin-right: 250px;
-        }
-
-        #customers {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        #customers td,
-        #customers th {
-            border: 1px solid #ddd;
-            padding: 5px;
-            text-align: center;
-        }
-
-        #customers tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #customers tr:hover {
-            background-color: #ddd;
-        }
-
-        #customers th {
-            padding-top: 8px;
-            padding-bottom: 8px;
-            text-align: center;
-            background-color: #071390;
-            color: white;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #071390;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            z-index: 1000;
-        }
-
-        footer h4,
-        footer p {
-            white-space: nowrap;
-            margin: 0;
-            padding: 2px;
-            display: inline;
-        }
-
-        .footer-bottom {
-            white-space: nowrap;
-            padding-top: 5px;
-        }
-
-        .footer-bottom p {
-            margin: 0;
-        }
-
-        
         .nav #lang-selector {
             margin-left: 10px;
             display: inline-block;
@@ -229,7 +156,7 @@
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
             z-index: 1;
             left: -65px;
-            top: -10px;  
+            top: -10px;
         }
 
         .nav #lang-selector .dropdown-content a {
@@ -253,43 +180,146 @@
         .nav #lang-selector select {
             display: none;
         }
+       
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            margin-top: 20px;
+            height: 100px;
+        }
 
-        .edit-btn,
-        .delete-btn {
-            background-color: #4CAF50;
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            background-color: #071390;
             color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 5px;
-            text-decoration: none;
+            border-radius: 8px;
+            padding: 2px;
         }
 
-        .delete-btn {
-            background-color: #f2463d;
+        form {
+            display: flex;
+            flex-direction: column;
         }
+
+        label {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+
+        .form-label {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+        }
+
+        .form-label,
+        select {
+            display: inline-block;
+            margin-bottom: 0px;
+            color: #333;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px; 
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #071390;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #0a1052;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .content {
+                margin-top: 10px;
+            }
+
+            .form-container {
+                max-width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .form-container {
+                padding: 10px;
+            }
+
+            input,
+            button {
+                width: 100%;
+                margin-bottom: 15px; 
+            }
+           
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #071390;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        footer h4, footer p {
+            white-space: nowrap;
+            margin: 0;
+            padding: 2px;
+            display: inline;
+        }
+
+        .footer-bottom {
+            white-space: nowrap;
+            padding-top: 5px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
+        .r1{
+            margin-left: 650px;
+        }
+        
     </style>
 </head>
 
 <body>
     <header>
-        <a class="logo" href="#"><img src="{% static 'app1/images/logo.jpg' %}" alt="Logo"></a>
         <nav class="nav">
-            <div class="dropdown">
-                <a href="{% url 'sites' %}">Site Management</a>
-                <div class="dropdown-content">
-                    <a href="{% url 'sites' %}">Link 1</a>
-                    <a href="{% url 'sites' %}">Link 2</a>
-                    <a href="{% url 'sites' %}">Link 3</a>
-                    <a href="{% url 'sites' %}">Link 4</a>
-                    <a href="{% url 'sites' %}">Link 5</a>
-                </div>
-            </div>
-            <a href="{% url 'get_all' %}">User Management</a>
-            <a href="{% url 'report' %}">Analytics & Reports</a>
-            <a href="{% url 'notification' %}">Notifications</a>
-            <a href="{% url 'company' %}">Company</a>
+            <a class="logo" href="#"><img src="{% static 'app1/images/logo.jpg' %}" alt="Logo"></a>
+            <a class="r1" href="{% url 'time' %}">Time Schedule</a>
             <div class="dropdown">
                 <a href="#" class="dropbtn"><i class="fas fa-user"></i>Profile</a>
                 <div class="dropdown-content">
@@ -314,33 +344,30 @@
             </div>
         </nav>
     </header>
+    
+    <div class="content">
+        <div class="form-container">
+            <h2>Add Data</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
 
-    <div class="user">
-        <a class="add" href="{% url 'timeshe' %}">Add</a>
+                <label for="id_name">Group:</label>
+                {{ form.group }}
+                <br>
+
+                <label for="id_works">Active Time:</label>
+                {{ form.active_time }}
+                <br>
+
+                <label for="id_safety_insurance">Inactive Time:</label>
+                {{ form.inactive_time }}
+                <br>
+
+                
+                <button type="submit">Save</button>
+            </form>
+        </div>
     </div>
-    <div id="table-container">
-        <table id="customers">
-            <tr>
-                <th>Group</th>
-                <th>Active Time</th>
-                <th>Inactive Time</th>
-                <th>Action</th>  
-            </tr>
-            
-            {% for row in data %}
-            <tr>
-                <td>{{ row.group }}</td>
-                <td>{{ row.active_time }}</td>
-                <td>{{ row.inactive_time }}</td>
-                <td>
-                    <a href="#" class="edit-btn">Edit</a>
-                    <a href="#" class="delete-btn">Delete</a>
-                </td>     
-            </tr>
-            {% endfor %}
-                </table>
-            </div>
-
     <footer>
         <p>Email: info@assuretech.com</p>
         <p>Phone: +1 (123) 456-7890</p>

@@ -79,10 +79,6 @@ class Upload_data(models.Model):
     def __str__(self):
         return str(self.uploaded_file)
     
-    
-class Orientation(models.Model):
-    attachments = models.FileField(upload_to='attachments/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])
-
 
 class Site_management(models.Model):
     link_field = models.URLField(max_length=200) 
@@ -137,3 +133,8 @@ class timeschedule(models.Model):
 
     def __str__(self):
         return self.group
+    
+
+class Upload_File(models.Model):
+    #uploaded_file = models.FileField(upload_to='uploads/') # it takes all files 
+    uploaded_file = models.FileField(upload_to='uploads/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])

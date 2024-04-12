@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
-from .forms import LoginForm,NotificationForm,upload_form,OrientationForm,YourModelForm,AssetForm,SiteForm,CompanyForm
-from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification
-from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer
+from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification,Upload_File
+from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer,UploadedFileSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -25,7 +25,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import generics
 from .middleware import ActionStatusMiddleware
 from django.core.exceptions import ValidationError
-
+from rest_framework.parsers import MultiPartParser, FormParser
 
 def user_login(request):
     if request.method == 'POST':
@@ -91,19 +91,6 @@ def upload_file(request):
     else:
         form = upload_form()
     return render(request, 'app1/upload.html', {'form': form})
-
-
-def orientation_task(request):
-    if request.method == 'POST':
-        form = OrientationForm(request.POST, request.FILES)  
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'message': 'file saved successfully'})
-        else:
-            print(form.errors)
-    else:
-        form = OrientationForm()
-    return render(request, 'app1/orientation.html', {'form': form})
 
 
 def report_view(request):
@@ -425,3 +412,26 @@ def timesche(request):
 class NotificationList(generics.ListAPIView):
     queryset = Notification.objects.all().order_by('-id')
     serializer_class = NotificationSerializer
+
+
+class FileUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = UploadedFileSerializer(data=request.data)
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+def add_timesh(request):
+    if request.method == 'POST':
+        form = timescheduleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('time') 
+    else:
+        form = timescheduleForm()
+    return render(request, 'app1/add_time.html', {'form': form})
