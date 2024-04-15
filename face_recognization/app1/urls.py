@@ -55,7 +55,7 @@ urlpatterns = [
     path('success/', views.success_page, name='success'),
     path('file_upload_api/', FileUploadView.as_view(), name='file-upload'),
     path('timeshe/', views.add_timesh, name='timeshe'),
-   
+    
 
 
 ] 

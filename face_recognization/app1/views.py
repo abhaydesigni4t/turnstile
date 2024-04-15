@@ -26,6 +26,7 @@ from rest_framework import generics
 from .middleware import ActionStatusMiddleware
 from django.core.exceptions import ValidationError
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def user_login(request):
     if request.method == 'POST':
@@ -93,9 +94,38 @@ def upload_file(request):
     return render(request, 'app1/upload.html', {'form': form})
 
 
-def report_view(request):
-    return render(request, 'app1/report.html')
+from django.shortcuts import render
+import matplotlib.pyplot as plt
+import os
+from django.conf import settings
+from .models import UserEnrolled
 
+from django.conf import settings
+import os
+
+def report_view(request):
+    try:
+        active_users = UserEnrolled.objects.filter(status='active').count()
+        inactive_users = UserEnrolled.objects.filter(status='inactive').count()
+
+        labels = ['Active', 'Inactive']
+        sizes = [active_users, inactive_users]
+        colors = ['lightgreen', 'lightcoral']
+
+        plt.figure(figsize=(6, 6))
+        plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        plt.title('User Status')
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+        chart_filename = 'pie_chart.png'
+        chart_path = os.path.join(settings.MEDIA_ROOT, chart_filename)
+        plt.savefig(chart_path)
+
+        chart_url = os.path.join(settings.MEDIA_URL, chart_filename)
+        return render(request, 'app1/report.html', {'chart_url': chart_url})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return render(request, 'app1/error.html', {'error_message': str(e)})
 
 class get_data(ListView):
     model = UserEnrolled
@@ -160,9 +190,22 @@ def edit_worker(request):
 def asset_management(request):
     return render(request,'app1/asset_management.html')
 
+
 def asset_site(request):
-    assets = Asset.objects.all()
-    return render(request,'app1/asset_site.html',{'assets': assets})
+    assets_list = Asset.objects.all()
+    paginator = Paginator(assets_list, 4) 
+
+    page_number = request.GET.get('page')
+    try:
+        assets = paginator.page(page_number)
+    except PageNotAnInteger:
+      
+        assets = paginator.page(1)
+    except EmptyPage:
+ 
+        assets = paginator.page(paginator.num_pages)
+
+    return render(request, 'app1/asset_site.html', {'assets': assets, 'page_obj': assets}) 
 
 
 def add_asset(request):
@@ -435,3 +478,6 @@ def add_timesh(request):
     else:
         form = timescheduleForm()
     return render(request, 'app1/add_time.html', {'form': form})
+
+
+

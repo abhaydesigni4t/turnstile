@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-l2pS9FXoq07xZ8T3is0sZuqA4xsJqHvAWEbflU24M6p0T/zl5sJ46R/DLxUJhSZ+7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'app1/css/style.css' %}">
     <title>Document</title>
-    {% load static %}
+    
     <style>
         body {
             font-family: 'Verdana', sans-serif;
@@ -186,21 +188,17 @@
             margin-top: 70px;
         }
 
-        .center-container {
-            text-align: center;
-            padding: 20px;
-        }
+        .container {
+    text-align: center;
+    margin-top: 50px;
+    }
 
-        .center-container img {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            border-radius: 50%;
-            opacity: 0.9;
-            display: block;
-            margin: 0 auto;
-        }
+    .chart-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
+        
         h1 {
             margin-top: 40px;
         }
@@ -280,9 +278,14 @@
             </div>
         </nav>
     </header>
-    <h1>Analytics & Reports</h1>
-    <div class="center-container">
-        <img src="{% static 'app1/images/Reports.jpg' %}" alt="Example Image">
+  
+    <div class="container">
+        <h1>Analytics & Reports</h1>
+        <div class="chart-container">
+            <img src="{{ chart_url }}" alt="User Status Pie Chart">
+        </div>
+    </div>
+
     </div>
     <footer>
         <p>Email: info@assuretech.com</p>

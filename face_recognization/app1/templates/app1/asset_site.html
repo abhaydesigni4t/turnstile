@@ -290,6 +290,37 @@
             margin-left: 650px;
         }
     
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination a {
+            color: #071390;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination .current {
+            background-color: #071390;
+            color: white;
+            margin: 5px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .pagination a {
+                padding: 8px 10px;
+            }
+        }
+
     </style>
 </head>
 
@@ -347,6 +378,22 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+
+                {% endif %}
+            </span>
+        </div>
     </div>
     </div>
     <footer>

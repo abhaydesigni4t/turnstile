@@ -138,3 +138,39 @@ class timeschedule(models.Model):
 class Upload_File(models.Model):
     #uploaded_file = models.FileField(upload_to='uploads/') # it takes all files 
     uploaded_file = models.FileField(upload_to='uploads/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])
+
+
+import matplotlib.pyplot as plt
+import os
+from django.conf import settings
+from django.shortcuts import render
+from .models import UserEnrolled  # Import the UserEnrolled model
+
+def report_view(request):
+    try:
+        # Retrieve counts of active and inactive users
+        active_users = UserEnrolled.objects.filter(status='active').count()
+        inactive_users = UserEnrolled.objects.filter(status='inactive').count()
+
+        # Prepare data for the pie chart
+        labels = ['Active', 'Inactive']
+        sizes = [active_users, inactive_users]
+        colors = ['lightgreen', 'lightcoral']
+
+        # Plot the pie chart
+        plt.figure(figsize=(6, 6))
+        plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        plt.title('User Status')
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+        # Save the pie chart as an image file
+        chart_path = os.path.join(settings.MEDIA_ROOT, 'pie_chart.png')
+        plt.savefig(chart_path)
+
+        # Render the template with the chart path
+        return render(request, 'app1/report.html', {'chart_path': chart_path})
+    except Exception as e:
+        # Log any exceptions that occur
+        print(f"An error occurred: {e}")
+        # Render a generic error page or handle the error as needed
+        return render(request, 'app1/error.html', {'error_message': str(e)})
