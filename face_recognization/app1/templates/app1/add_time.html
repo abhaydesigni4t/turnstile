@@ -350,20 +350,7 @@
             <h2>Add Data</h2>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-
-                <label for="id_name">Group:</label>
-                {{ form.group }}
-                <br>
-
-                <label for="id_works">Active Time:</label>
-                {{ form.active_time }}
-                <br>
-
-                <label for="id_safety_insurance">Inactive Time:</label>
-                {{ form.inactive_time }}
-                <br>
-
-                
+                {{ form.as_p }}  <!-- Render the form fields -->
                 <button type="submit">Save</button>
             </form>
         </div>

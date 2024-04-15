@@ -27,6 +27,10 @@ from .middleware import ActionStatusMiddleware
 from django.core.exceptions import ValidationError
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import matplotlib.pyplot as plt
+import os
+from django.conf import settings
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -94,15 +98,6 @@ def upload_file(request):
     return render(request, 'app1/upload.html', {'form': form})
 
 
-from django.shortcuts import render
-import matplotlib.pyplot as plt
-import os
-from django.conf import settings
-from .models import UserEnrolled
-
-from django.conf import settings
-import os
-
 def report_view(request):
     try:
         active_users = UserEnrolled.objects.filter(status='active').count()
@@ -114,7 +109,7 @@ def report_view(request):
 
         plt.figure(figsize=(6, 6))
         plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
-        plt.title('User Status')
+        #plt.title('User Status')
         plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
         chart_filename = 'pie_chart.png'
@@ -468,7 +463,6 @@ class FileUploadView(APIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
 def add_timesh(request):
     if request.method == 'POST':
         form = timescheduleForm(request.POST)
@@ -480,4 +474,23 @@ def add_timesh(request):
     return render(request, 'app1/add_time.html', {'form': form})
 
 
+def edit_timeschedule(request, id):
+    instance = get_object_or_404(timeschedule, id=id)
+    
+    if request.method == 'POST':
+        form = timescheduleForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('time')  
+    else:
+        form = timescheduleForm(instance=instance)
+
+    return render(request, 'app1/add_time.html', {'form': form})
+
+def delete_timeschedule(request, id):
+    instance = get_object_or_404(timeschedule, id=id)
+    if request.method == 'POST':
+        instance.delete()
+        return redirect('time')  
+    return render(request, 'app1/data_confirm_delete6.html', {'instance': instance})
 

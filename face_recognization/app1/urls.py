@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList,FileUploadView
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList,FileUploadView,edit_timeschedule,delete_timeschedule
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -55,7 +55,8 @@ urlpatterns = [
     path('success/', views.success_page, name='success'),
     path('file_upload_api/', FileUploadView.as_view(), name='file-upload'),
     path('timeshe/', views.add_timesh, name='timeshe'),
-    
+    path('edit_time/<int:id>/', edit_timeschedule, name='edit_timeschedule'),
+    path('delete_time/<int:id>/', delete_timeschedule, name='delete_timeschedule'),
 
 
 ] 

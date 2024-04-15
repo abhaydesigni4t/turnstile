@@ -332,8 +332,9 @@
                 <td>{{ row.active_time }}</td>
                 <td>{{ row.inactive_time }}</td>
                 <td>
-                    <a href="#" class="edit-btn">Edit</a>
-                    <a href="#" class="delete-btn">Delete</a>
+                  
+                    <a href="{% url 'edit_timeschedule' row.id %}" class="edit-btn">Edit</a>
+                    <a href="{% url 'delete_timeschedule' row.id %}" class="delete-btn">Delete</a>
                 </td>     
             </tr>
             {% endfor %}
