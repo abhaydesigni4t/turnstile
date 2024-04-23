@@ -1,6 +1,6 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,timeschedule
+from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,timeschedule,Turnstile_S
 from django.contrib.auth import get_user_model
 
 
@@ -78,3 +78,9 @@ class timescheduleForm(forms.ModelForm):
     class Meta:
         model = timeschedule
         fields = '__all__'
+
+
+class TurnstileForm(forms.ModelForm):
+    class Meta:
+        model = Turnstile_S
+        fields = ['turnstile_id','location','safety_confirmation']

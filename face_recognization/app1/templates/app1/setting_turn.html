@@ -204,7 +204,7 @@
 
         .switch-icon {
             font-size: 24px; /* Adjust the size as needed */
-            color: #071390; /* Set the desired color */
+            color: #21eb0f; /* Set the desired color */
             cursor: pointer;
         }
         .nav #lang-selector {
@@ -305,7 +305,7 @@
     </header>
 
     <div class="user">
-        <a class="add" href="#">Add</a>
+        <a class="add" href="{% url 'add_turnstile' %}">Add</a>
     </div>
     <div id="table-container">
         <table id="customers">
@@ -313,29 +313,17 @@
                 <th>Sr.No</th>
                 <th>Turnstile ID</th>
                 <th>Location</th>
-                <th>Safety Confirmation</th>
-                  
+                <th>Safety Confirmation</th>     
             </tr>
             
+            {% for turnstile in turnstiles %}
             <tr>
-                <td>1</td>
-                <td>001</td>
-                <td>abc</td>
-                <td class="switch-icon"><i class="fas fa-toggle-on"></i></td>   
+                <td>{{ turnstile.sr_no }}</td>
+                <td>{{ turnstile.turnstile_id }}</td>
+                <td>{{ turnstile.location }}</td>
+                <td class="switch-icon">{% if turnstile.safety_confirmation %}<i class="fas fa-toggle-on"></i>{% else %}<i class="fas fa-toggle-off"></i>{% endif %}</td>   
             </tr>
-            
-            <tr>
-                <td>2</td>
-                <td>002</td>
-                <td>abc</td>
-                <td class="switch-icon"><i class="fas fa-toggle-on"></i></td>   
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>003</td>
-                <td>abc</td>
-                <td class="switch-icon"><i class="fas fa-toggle-on"></i></td>   
-            </tr>
+            {% endfor %}
         </table>
     </div>
 

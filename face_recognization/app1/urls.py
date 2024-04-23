@@ -57,6 +57,7 @@ urlpatterns = [
     path('timeshe/', views.add_timesh, name='timeshe'),
     path('edit_time/<int:id>/', edit_timeschedule, name='edit_timeschedule'),
     path('delete_time/<int:id>/', delete_timeschedule, name='delete_timeschedule'),
+    path('add_turnstile/', views.add_turnstile, name='add_turnstile'),
 
 
 ] 

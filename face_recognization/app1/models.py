@@ -140,3 +140,11 @@ class Upload_File(models.Model):
     uploaded_file = models.FileField(upload_to='uploads/', validators=[FileExtensionValidator(['pdf', 'doc', 'docx', 'jpeg', 'jpg'])])
 
 
+class Turnstile_S(models.Model):
+    sr_no = models.AutoField(primary_key=True,unique=True)
+    turnstile_id = models.IntegerField(unique=True)
+    location = models.CharField(max_length=100)
+    safety_confirmation = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.turnstile_id)

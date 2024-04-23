@@ -24,7 +24,8 @@ class AssetSerializer(serializers.ModelSerializer):
 class UserEnrolledSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserEnrolled
-        fields = '__all__'
+        fields = ['name','company_name','job_role','mycompany_id','tag_id','job_location','orientation','status']
+       
 
 class ExitSerializer(serializers.ModelSerializer):
     class Meta:

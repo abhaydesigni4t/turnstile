@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
-from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm
-from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification,Upload_File
+from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm,TurnstileForm
+from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification,Upload_File,Turnstile_S
 from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer,UploadedFileSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -274,7 +274,8 @@ def time_shedule(request):
     return render(request,'app1/time_shedule.html')
 
 def setting_turn(request):
-    return render(request,'app1/setting_turn.html')
+    turnstiles = Turnstile_S.objects.all()
+    return render(request, 'app1/setting_turn.html', {'turnstiles': turnstiles})
 
 
 class ActionStatusAPIView(APIView):
@@ -494,3 +495,12 @@ def delete_timeschedule(request, id):
         return redirect('time')  
     return render(request, 'app1/data_confirm_delete6.html', {'instance': instance})
 
+def add_turnstile(request):
+    if request.method == 'POST':
+        form = TurnstileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('setting_t') 
+    else:
+        form = TurnstileForm()
+    return render(request, 'app1/add_turnstile.html', {'form': form})
