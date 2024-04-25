@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserEnrolled,Asset,Exit,Site,Notification,Upload_File
+from .models import UserEnrolled,Asset,Exit,Site,Notification,Upload_File,Turnstile_S
 
 class UserEnrolledSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,3 +46,13 @@ class UploadedFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Upload_File
         fields = '__all__'
+
+class TurnstileSerializer(serializers.ModelSerializer):
+    safety_confirmation = serializers.SerializerMethodField()
+
+    def get_safety_confirmation(self, obj):
+        return 1 if obj.safety_confirmation else 0
+
+    class Meta:
+        model = Turnstile_S
+        fields = ['turnstile_id', 'location', 'safety_confirmation']

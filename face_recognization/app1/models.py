@@ -85,13 +85,16 @@ class Site_management(models.Model):
 
 
 class Asset(models.Model):
-    asset_name = models.CharField(max_length=255)
     asset_id = models.IntegerField(unique=True)
+    asset_name = models.CharField(max_length=255)
     description = models.CharField(max_length=500)
     asset_category = models.CharField(max_length=250)
     
     def __str__(self):
+
         return self.asset_name
+    
+    
     
 class Exit(models.Model):
     asset_id = models.IntegerField(unique=True)
@@ -124,6 +127,15 @@ class company(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.pk: 
+            last_instance = self.__class__.objects.last()
+            if last_instance:
+                self.sr = last_instance.sr + 1
+            else:
+                self.sr = 1
+        super().save(*args, **kwargs)
 
 
 class timeschedule(models.Model):
@@ -148,3 +160,12 @@ class Turnstile_S(models.Model):
 
     def __str__(self):
         return str(self.turnstile_id)
+    
+    def save(self, *args, **kwargs):
+        if not self.pk: 
+            last_instance = self.__class__.objects.last()
+            if last_instance:
+                self.sr_no = last_instance.sr_no + 1
+            else:
+                self.sr_no = 1
+        super().save(*args, **kwargs)

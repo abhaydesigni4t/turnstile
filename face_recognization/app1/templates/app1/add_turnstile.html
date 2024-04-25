@@ -198,7 +198,8 @@
             background-color: #071390;
             color: white;
             border-radius: 8px;
-            padding: 5px;
+            padding: 8px;
+            font-size: medium;
         }
 
         form {
@@ -310,6 +311,50 @@
             margin-left: 650px;
         }
     
+        
+        .checkbox-container {
+            display: inline-block;
+            position: relative;
+            margin-right: 180px; /* Adjust as needed */
+            margin-bottom: 25px;
+            
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 15px;
+            width: 15px; /* Adjust size to fit */
+            background-color: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.5); /* Light black border */
+            border-radius: 3px; /* Rounded border */
+            margin-top: 4px;
+        }
+
+        .checkmark:after {
+            content: '';
+            position: absolute;
+            display: none;
+            top: 2px;
+            left: 4px;
+            width: 5px;
+            height: 10px;
+            border: solid black;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkmark:after {
+            display: block;
+        }
 
 
     </style>
@@ -360,13 +405,18 @@
                 <br>
 
                
-                <label for="{{ form.safety_confirmation.id_for_label }}">Safety Confirmation</label>
-                {{ form.safety_confirmation }}
+                <label class="checkbox-container" for="{{ form.safety_confirmation.id_for_label }}">Safety Confirmation:
+                    <input type="checkbox" class="check" id="{{ form.safety_confirmation.id_for_label }}" name="{{ form.safety_confirmation.name }}"
+                           {% if form.instance.safety_confirmation %} checked {% endif %}>
+                    <span class="checkmark"></span>
+                </label>
+                
 
                 <button type="submit">Save</button>
             </form>
         </div>
     </div>
+    
     <footer>
         <p>Email: info@assuretech.com</p>
         <p>Phone: +1 (123) 456-7890</p>

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
 from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm,TurnstileForm
 from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification,Upload_File,Turnstile_S
-from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer,UploadedFileSerializer
+from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer,UploadedFileSerializer,TurnstileSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -126,7 +126,7 @@ class get_data(ListView):
     model = UserEnrolled
     template_name = 'app1/getdata.html'
     context_object_name = 'data'
-    paginate_by = 5  
+    paginate_by = 10  
 
     def get_queryset(self):
         return UserEnrolled.objects.all()
@@ -188,7 +188,7 @@ def asset_management(request):
 
 def asset_site(request):
     assets_list = Asset.objects.all()
-    paginator = Paginator(assets_list, 4) 
+    paginator = Paginator(assets_list, 8) 
 
     page_number = request.GET.get('page')
     try:
@@ -211,37 +211,39 @@ def add_asset(request):
                 form.save()
                 return redirect('asset_site')
             except ValidationError as e:
-                form.add_error('asset_id', str(e))
+                form.add_error('asset_id', str(e))  
     else:
         form = AssetForm()
     return render(request, 'app1/add_asset.html', {'form': form})
 
-
-class AssetDetailView(DetailView):
-    model = Asset
-    template_name = 'app1/view_asset.html'  
-    context_object_name = 'asset'
-
-
-class AssetUpdateView(UpdateView):
-    model = Asset
-    form_class = AssetForm
-    template_name = 'app1/add_asset.html'
-    success_url = '/asset_site/'
-
-    def get(self, request, *args, **kwargs):
-        
-        asset_instance = get_object_or_404(Asset, pk=kwargs['pk'])
-        
-        form = self.form_class(instance=asset_instance)
-        
-        return self.render_to_response({'form': form})
+def update_asset(request, asset_id):
+    asset = get_object_or_404(Asset, asset_id=asset_id)
+    
+    if request.method == 'POST':
+        form = AssetForm(request.POST, instance=asset)
+        if form.is_valid():
+            form.save()
+            return redirect('asset_site')
+    else:
+        form = AssetForm(instance=asset)
+    
+    return render(request, 'app1/add_asset.html', {'form': form})
 
 
-class AssetDeleteView(DeleteView):
-    model = Asset
-    template_name = 'app1/data_confirm_delete1.html'
-    success_url = reverse_lazy('asset_site')
+
+def asset_site(request):
+    assets = Asset.objects.values('asset_id', 'asset_name') 
+
+    paginator = Paginator(assets, 8)  
+
+    page_number = request.GET.get('page')
+    assets = paginator.get_page(page_number)
+
+    return render(request, 'app1/asset_site.html', {'assets': assets})
+
+def asset_details(request, asset_id):
+    asset = get_object_or_404(Asset, asset_id=asset_id)
+    return render(request, 'app1/view_asset.html', {'asset': asset})
 
 
 class DownloadDatabaseView(APIView):
@@ -504,3 +506,26 @@ def add_turnstile(request):
     else:
         form = TurnstileForm()
     return render(request, 'app1/add_turnstile.html', {'form': form})
+
+
+def delete_selected(request):
+    if request.method == 'POST':
+        selected_records = request.POST.getlist('selected_recordings')
+        if 'select_all' in request.POST:
+            selected_records = [str(record.pk) for record in Turnstile_S.objects.all()]
+        Turnstile_S.objects.filter(pk__in=selected_records).delete()
+        return redirect('setting_t')  
+    return redirect('setting_t')
+
+class TurnstileUpdateView(UpdateView):
+    model = Turnstile_S
+    form_class = TurnstileForm
+    template_name = 'app1/add_turnstile.html' 
+    success_url = reverse_lazy('setting_t')
+
+
+class Turnstile_API(APIView):
+    def get(self, request):
+        turnstiles = Turnstile_S.objects.all()
+        serializer = TurnstileSerializer(turnstiles, many=True)
+        return Response(serializer.data)

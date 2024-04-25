@@ -15,7 +15,7 @@
             padding-top: 10vh;
             background: #f4f4f4;
             box-sizing: border-box;
-            height: 650px;
+            height: 750px;
         }
 
         header {
@@ -342,35 +342,13 @@
             <h2>Add New Asset</h2>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-
-                <label for="{{ form.asset_name.id_for_label }}">Asset Name:</label>
-                {{ form.asset_name }}
-                <br>
-
-                {% if form.asset_id.errors %}
-                <ul>
-                    {% for error in form.asset_id.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-
-                <label for="{{ form.asset_id.id_for_label }}">Asset ID:</label>
-                {{ form.asset_id }}
-                <br>
-
-                <label for="{{ form.description.id_for_label }}">Description:</label>
-                {{ form.description }}
-                <br>
-
-                <label for="{{ form.asset_category.id_for_label }}">Asset Category:</label>
-                {{ form.asset_category }}
-                <br>
-                
-                <button type="submit">Save</button>
+                {{ form.as_p }} <!-- Render form fields -->
+    
+                <button type="submit">Add Asset</button>
             </form>
         </div>
     </div>
+    
     <footer>
         <p>Email: info@assuretech.com</p>
         <p>Phone: +1 (123) 456-7890</p>

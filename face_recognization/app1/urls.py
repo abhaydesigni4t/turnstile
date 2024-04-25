@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,AssetDetailView,AssetUpdateView,AssetDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList,FileUploadView,edit_timeschedule,delete_timeschedule
+from .views import UserEnrolledListCreateView,UserEnrolledRetrieveUpdateDestroyView,get_data,create_data,UpdateData,TaskDeleteView,DownloadDatabaseView,ActionStatusAPIView,ChangeDetectionView,LoginAPIView,AssetCreateAPIView,AssetListAPIView,UserEnrollListCreateAPIView,UserEnrollDetailAPIView,SiteListAPIView,SiteUpdateView,SiteDeleteView,CompanyUpdateView,CompanyDeleteView,NotificationList,FileUploadView,edit_timeschedule,delete_timeschedule,TurnstileUpdateView,Turnstile_API
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -27,9 +27,8 @@ urlpatterns = [
     path('asset_manage/',views.asset_management,name='asset_manage'),
     path('asset_site/',views.asset_site,name='asset_site'),
     path('add_asset/',views.add_asset,name='add_asset'),
-    path('assets/<int:pk>/', AssetDetailView.as_view(), name='asset_detail'),
-    path('edit_asset/<int:pk>/', AssetUpdateView.as_view(), name='asset_edit'),
-    path('delete_asset/<int:pk>/', AssetDeleteView.as_view(), name='asset_delete'),
+    path('update_asset/<int:asset_id>/', views.update_asset, name='update_asset'),
+    path('asset_details/<int:asset_id>/', views.asset_details, name='asset_details'),
     path('download-db/', DownloadDatabaseView.as_view(), name='download-db'),  # download in sqlite3 that is binary
     path('detect_changes/', ChangeDetectionView.as_view(), name='detect-changes'),
     path('exit/',views.exit,name='exit'),
@@ -58,7 +57,9 @@ urlpatterns = [
     path('edit_time/<int:id>/', edit_timeschedule, name='edit_timeschedule'),
     path('delete_time/<int:id>/', delete_timeschedule, name='delete_timeschedule'),
     path('add_turnstile/', views.add_turnstile, name='add_turnstile'),
-
+    path('delete_selected/', views.delete_selected, name='delete_selected'),
+    path('edit_turnstile/<int:pk>/', TurnstileUpdateView.as_view(), name='turnstile_edit'),
+    path('turnstile_api/', Turnstile_API.as_view(), name='turnstile_api'),
 
 ] 
 

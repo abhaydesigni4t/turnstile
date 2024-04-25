@@ -17,7 +17,7 @@
             padding-top: 10vh;
             background: #f4f4f4;
             box-sizing: border-box;
-            height: 600px;
+            height: 700px;
         }
 
         header {
@@ -184,13 +184,13 @@
         }
 
         .main-content {
-            margin-left: 200px;
+            margin-left: 250px;
             padding: 5px;
             
         }
 
         table {
-            width: 130%;
+            width: 200%;
             border-collapse: collapse;
             margin-top: 15px;
         }
@@ -198,8 +198,8 @@
         th,
         td {
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+            padding: 3px;
+            text-align: center;
         }
 
         th {
@@ -220,6 +220,7 @@
             color: white;
             text-decoration: none;
             border-radius: 4px;
+           
         }
 
         td.asset-name {
@@ -295,6 +296,7 @@
             justify-content: center;
             margin-top: 20px;
             flex-wrap: wrap;
+            
         }
 
         .pagination a {
@@ -321,6 +323,15 @@
             }
         }
 
+        h2{
+            text-align: center;
+            margin-top: 50px;
+          
+        }
+        .link{
+            color: black;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -352,45 +363,42 @@
             </div>            
         </nav>
     </header>
+    <h2>Add New Asset</h2>
     <div class="main-container">
     <div class="main-content">
-        <h1>Add New Asset</h1>
         <a href="{% url 'add_asset' %}" class="add-new-button">Add New</a>
 
         <table>
-            <thead>
-                <tr>
-                    <th>ASSET ID</th>
-                    <th>ASSET NAME</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for asset in assets %}
-                <tr>
-                    <td>{{ asset.asset_id }}</td>
-                    <td class="asset-name"><a href="{% url 'asset_detail' pk=asset.pk %}">{{ asset.asset_name }}</a></td>
-                    <td>
-                        <a href="{% url 'asset_edit' asset.id %}" class="view1">Edit</a>
-                        <a href="{% url 'asset_delete' asset.id %}" class="view2">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+            <tr>
+                <th>ASSET ID</th>
+                <th>ASSET NAME</th>
+                <th>Action</th>
+            </tr>
+            {% for asset in assets %}
+            <tr>
+                <td>{{ asset.asset_id }}</td>
+                <td><a class="link" href="{% url 'asset_details' asset_id=asset.asset_id %}">{{ asset.asset_name }}</a></td>
+                <td>
+                    <a href="{% url 'update_asset' asset_id=asset.asset_id %}" class="view1">Edit</a>
+                    <a href="#" class="view2">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
         </table>
         <div class="pagination">
             <span class="step-links">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% if assets.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ assets.previous_page_number }}">previous</a>
                 {% endif %}
-
+        
                 <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    Page {{ assets.number }} of {{ assets.paginator.num_pages }}.
                 </span>
-
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-
+        
+                {% if assets.has_next %}
+                    <a href="?page={{ assets.next_page_number }}">next</a>
+                    <a href="?page={{ assets.paginator.num_pages }}">last &raquo;</a>
                 {% endif %}
             </span>
         </div>
@@ -403,6 +411,10 @@
             <p>&copy; 2024 Assure Tech. All rights reserved.</p>
         </div>
     </footer>
+
+
 </body>
+
+
 
 </html>

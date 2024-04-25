@@ -258,6 +258,25 @@
         .nav #lang-selector select {
             display: none;
         }
+
+        .edit-btn
+            {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            text-decoration: none;
+        }
+
+        .delete-btn{
+            background-color: red;
+            color: white;
+            border: none;
+        }
+
     </style>
 </head>
 
@@ -309,22 +328,34 @@
     </div>
     <div id="table-container">
         <table id="customers">
-            <tr>
-                <th>Sr.No</th>
-                <th>Turnstile ID</th>
-                <th>Location</th>
-                <th>Safety Confirmation</th>     
-            </tr>
+            <form method="post" action="{% url 'delete_selected' %}">
+                {% csrf_token %}
+                <table id="customers">
+                    <tr>
+                        <th><input type="checkbox" onClick="toggleAll(this)"></th>
+                        <th>Sr.No</th>
+                        <th>Turnstile ID</th>
+                        <th>Location</th>
+                        <th>Safety Confirmation</th>  
+                        <th>Action</th>   
+                    </tr>
+                    
+                    {% for turnstile in turnstiles %}
+                    <tr>
+                        <td><input type="checkbox" name="selected_recordings" value="{{ turnstile.pk }}"></td>
+                        <td>{{ turnstile.sr_no }}</td>
+                        <td>{{ turnstile.turnstile_id }}</td>
+                        <td>{{ turnstile.location }}</td>
+                        <td class="switch-icon">{% if turnstile.safety_confirmation %}<i class="fas fa-toggle-on"></i>{% else %}<i class="fas fa-toggle-off"></i>{% endif %}</td> 
+                        <td>
+                            <a href="{% url 'turnstile_edit' pk=turnstile.pk %}" class="edit-btn">Edit</a>
+                        </td>  
+                    </tr>
+                    {% endfor %}
+                </table>
+                <button type="submit" class="delete-btn">Delete Selected</button>
+            </form>
             
-            {% for turnstile in turnstiles %}
-            <tr>
-                <td>{{ turnstile.sr_no }}</td>
-                <td>{{ turnstile.turnstile_id }}</td>
-                <td>{{ turnstile.location }}</td>
-                <td class="switch-icon">{% if turnstile.safety_confirmation %}<i class="fas fa-toggle-on"></i>{% else %}<i class="fas fa-toggle-off"></i>{% endif %}</td>   
-            </tr>
-            {% endfor %}
-        </table>
     </div>
 
     <footer>
@@ -334,6 +365,15 @@
             <p>&copy; 2024 Assure Tech. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        function toggleAll(source) {
+            checkboxes = document.getElementsByName('selected_recordings');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 </body>
 
 </html>

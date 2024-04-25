@@ -47,7 +47,8 @@ class AssetForm(forms.ModelForm):
 
     class Meta:
         model = Asset
-        fields = ['asset_name', 'asset_id', 'description', 'asset_category']
+        fields = [ 'asset_id','asset_name', 'description', 'asset_category']
+      
 
     def clean_asset_id(self):
         asset_id = self.cleaned_data.get('asset_id')
