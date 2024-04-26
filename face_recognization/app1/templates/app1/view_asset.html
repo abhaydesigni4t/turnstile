@@ -249,10 +249,6 @@
         <h1>ASSET Details</h1>
         <table>
             <tr>
-                <th>Property</th>
-                <th>Value</th>
-            </tr>
-            <tr>
                 <td><strong>Asset Name</strong></td>
                 <td>{{ asset.asset_name }}</td>
             </tr>
@@ -268,7 +264,10 @@
                 <td><strong>Asset Category</strong></td>
                 <td>{{ asset.asset_category }}</td>
             </tr>
-            
+            <tr>
+                <td><strong>Status</strong></td>
+                <td>{{ asset.status }}</td>
+            </tr>
         </table>
 
         <a href="{% url 'asset_site' %}" class="back-link">Back to Asset List</a>

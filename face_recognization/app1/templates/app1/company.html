@@ -180,8 +180,9 @@
         }
        
         .user {
-            text-align: center;
+            text-align: left;
             margin-top: 50px;
+            margin-left: 65px;
         }
 
         .add {
@@ -189,16 +190,17 @@
             color: white;
             padding: 10px;
             border: solid;
-            margin-top: 20px;
+            margin-top: 2px;
             display: inline-block;
             text-decoration: none;
-            border-radius: 45px 20px;
+            border-radius: 10px 10px;
         }
 
         #table-container {
-            margin-top: 20px;
-            margin-left: 250px;
-            margin-right: 250px;
+            margin-top: 10px;
+            margin-left: 65px;
+            margin-right: 350px;
+            width: 90%;
         }
 
         #customers {
@@ -319,7 +321,7 @@
     </header>
 
     <div class="user">
-        <a class="add" href="{% url 'add_company' %}">Add</a>
+        <a class="add" href="{% url 'add_company' %}">Add New</a>
     </div>
     <div id="table-container">
         <table id="customers">

@@ -182,21 +182,24 @@
         }
 
         .main-content {
-            margin-left: 300px;
+            margin-left: 40px;
             padding: 20px;
+            width: 70%;
+            margin-right: 80px;
+
         }
 
         table {
             width: 130%;
             border-collapse: collapse;
-            margin-top: 35px;
+            margin-top: 15px;
         }
 
         th,
         td {
             border: 1px solid #ddd;
-            padding: 13px;
-            text-align: left;
+            padding: 5px;
+            text-align: center;
         }
 
         th {
@@ -246,6 +249,24 @@
             margin-left: 600px;
 
             }
+
+            .add-new-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #071390;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 25px;
+           
+        }
+
+        .delete-btn{
+            background-color: red;
+            color: white;
+            border: none;
+        }
+
     </style>
 </head>
 
@@ -276,21 +297,26 @@
             </div>
         </nav>
     </header>
+  
     <div class="main-container">
         <div class="main-content">
-           
+            <a href="{% url 'add_exit' %}" class="add-new-button">Add New</a>
+            <form method="post" action="{% url 'delete_selected1' %}">
+                {% csrf_token %}
             <table>
                 <thead>
                     <tr>
-                        <th>ASSET ID</th>
-                        <th>ASSET NAME</th>
-                        <th>LOCATION</th>
-                        <th>TIME LOG</th>
+                        <th><input type="checkbox" onClick="toggleAll(this)"></th>
+                        <th>Asset Id</th>
+                        <th>Asset Name</th>
+                        <th>Location</th>
+                        <th>Time Log</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for asset in assets %}
                     <tr>
+                        <td><input type="checkbox" name="selected_recordings" value="{{ asset.pk }}"></td>
                         <td>{{ asset.asset_id }}</td>
                         <td>{{ asset.asset_name }}</td> 
                         <td>{{ asset.location }}</td>
@@ -299,6 +325,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <button type="submit" class="delete-btn">Delete Selected</button>
         </div>
         </div>
         <footer>
@@ -308,6 +335,15 @@
                 <p>&copy; 2024 Assure Tech. All rights reserved.</p>
             </div>
         </footer>
+
+        <script>
+            function toggleAll(source) {
+                checkboxes = document.getElementsByName('selected_recordings');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = source.checked;
+                }
+            }
+        </script>
 </body>
 
 </html>

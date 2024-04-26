@@ -1,6 +1,6 @@
 from django import forms 
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,timeschedule,Turnstile_S
+from .models import CustomUser,Upload_data,Asset,Site,company,UserEnrolled,Notification,timeschedule,Turnstile_S,Exit
 from django.contrib.auth import get_user_model
 
 
@@ -45,16 +45,16 @@ class AssetForm(forms.ModelForm):
     ]
     asset_category = forms.ChoiceField(choices=asset_category_choices)
 
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    status = forms.ChoiceField(choices=STATUS_CHOICES)
+
     class Meta:
         model = Asset
-        fields = [ 'asset_id','asset_name', 'description', 'asset_category']
+        fields = [ 'asset_id','asset_name', 'description', 'asset_category','status']
       
-
-    def clean_asset_id(self):
-        asset_id = self.cleaned_data.get('asset_id')
-        if Asset.objects.filter(asset_id=asset_id).exists():
-            raise forms.ValidationError("This asset ID already exists.")
-        return asset_id
 
 class SiteForm(forms.ModelForm):
     class Meta:
@@ -85,3 +85,9 @@ class TurnstileForm(forms.ModelForm):
     class Meta:
         model = Turnstile_S
         fields = ['turnstile_id','location','safety_confirmation']
+
+
+class ExitForm(forms.ModelForm):
+    class Meta:
+        model = Exit
+        fields = ['asset_id','asset_name','location']

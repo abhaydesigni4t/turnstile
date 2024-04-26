@@ -88,7 +88,12 @@ class Asset(models.Model):
     asset_id = models.IntegerField(unique=True)
     asset_name = models.CharField(max_length=255)
     description = models.CharField(max_length=500)
-    asset_category = models.CharField(max_length=250)
+    asset_category = models.CharField(max_length=50)
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     
     def __str__(self):
 
@@ -100,7 +105,7 @@ class Exit(models.Model):
     asset_id = models.IntegerField(unique=True)
     asset_name = models.CharField(max_length=255)
     location = models.CharField(max_length=100)
-    time_log = models.CharField(max_length=10)
+    time_log = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return self.asset_name

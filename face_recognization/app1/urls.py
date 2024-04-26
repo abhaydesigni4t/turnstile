@@ -32,6 +32,7 @@ urlpatterns = [
     path('download-db/', DownloadDatabaseView.as_view(), name='download-db'),  # download in sqlite3 that is binary
     path('detect_changes/', ChangeDetectionView.as_view(), name='detect-changes'),
     path('exit/',views.exit,name='exit'),
+    path('add_exit/',views.add_exit,name='add_exit'),
     path('setting_t/',views.setting_turn,name='setting_t'),
     path('action_status/', ActionStatusAPIView.as_view(), name='action_status'),
     path('login_api/', LoginAPIView.as_view(), name='api-login'),
@@ -60,6 +61,8 @@ urlpatterns = [
     path('delete_selected/', views.delete_selected, name='delete_selected'),
     path('edit_turnstile/<int:pk>/', TurnstileUpdateView.as_view(), name='turnstile_edit'),
     path('turnstile_api/', Turnstile_API.as_view(), name='turnstile_api'),
+    path('delete_selected1/', views.delete_selected1, name='delete_selected1'),
+
 
 ] 
 

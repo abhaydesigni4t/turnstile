@@ -15,7 +15,7 @@
             padding-top: 10vh;
             background: #f4f4f4;
             box-sizing: border-box;
-            height: 750px;
+            height: 850px;
         }
 
         header {
@@ -307,6 +307,9 @@
 
         }
         
+        .form-container h2{
+            font-size: 20px;
+        }
     </style>
 </head>
 
@@ -342,7 +345,7 @@
             <h2>Add New Asset</h2>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.as_p }} <!-- Render form fields -->
+                {{ form.as_p }}
     
                 <button type="submit">Add Asset</button>
             </form>

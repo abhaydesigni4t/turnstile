@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login,logout
-from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm,TurnstileForm
+from .forms import LoginForm,NotificationForm,upload_form,YourModelForm,AssetForm,SiteForm,CompanyForm,timescheduleForm,TurnstileForm,ExitForm
 from .models import CustomUser,UserEnrolled,Asset,Exit,Site,company,timeschedule,Notification,Upload_File,Turnstile_S
 from .serializers import LoginSerializer,AssetSerializer,UserEnrolledSerializer,ExitSerializer,SiteSerializer,ActionStatusSerializer,NotificationSerializer,UploadedFileSerializer,TurnstileSerializer
 from rest_framework.decorators import api_view
@@ -186,23 +186,6 @@ def asset_management(request):
     return render(request,'app1/asset_management.html')
 
 
-def asset_site(request):
-    assets_list = Asset.objects.all()
-    paginator = Paginator(assets_list, 8) 
-
-    page_number = request.GET.get('page')
-    try:
-        assets = paginator.page(page_number)
-    except PageNotAnInteger:
-      
-        assets = paginator.page(1)
-    except EmptyPage:
- 
-        assets = paginator.page(paginator.num_pages)
-
-    return render(request, 'app1/asset_site.html', {'assets': assets, 'page_obj': assets}) 
-
-
 def add_asset(request):
     if request.method == 'POST':
         form = AssetForm(request.POST)
@@ -232,7 +215,7 @@ def update_asset(request, asset_id):
 
 
 def asset_site(request):
-    assets = Asset.objects.values('asset_id', 'asset_name') 
+    assets = Asset.objects.values('asset_id', 'asset_name','status') 
 
     paginator = Paginator(assets, 8)  
 
@@ -529,3 +512,27 @@ class Turnstile_API(APIView):
         turnstiles = Turnstile_S.objects.all()
         serializer = TurnstileSerializer(turnstiles, many=True)
         return Response(serializer.data)
+    
+def add_exit(request):
+    if request.method == 'POST':
+        form = ExitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('exit') 
+    else:
+        form = ExitForm()
+    return render(request, 'app1/add_exit.html', {'form': form})
+
+
+def delete_selected1(request):
+    if request.method == 'POST':
+        selected_records = request.POST.getlist('selected_recordings')
+        if 'select_all' in request.POST:
+            selected_records = [str(record.pk) for record in Exit.objects.all()]
+        Exit.objects.filter(pk__in=selected_records).delete()
+        return redirect('exit')  
+    return redirect('exit')
+
+
+
+        

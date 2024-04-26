@@ -30,7 +30,7 @@ class UserEnrolledSerializer(serializers.ModelSerializer):
 class ExitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exit
-        fields = '__all__'
+        exclude = ['id']
 
 class SiteSerializer(serializers.ModelSerializer):
     class Meta:
