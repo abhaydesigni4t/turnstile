@@ -534,5 +534,8 @@ def delete_selected1(request):
     return redirect('exit')
 
 
-
+class Turnstile_get_single_api(generics.RetrieveAPIView):
+    queryset = Turnstile_S.objects.all()
+    serializer_class = TurnstileSerializer
+    lookup_field = 'turnstile_id'
         
